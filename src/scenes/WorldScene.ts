@@ -4,6 +4,7 @@ import { EntityManager } from "@core/EntityManager";
 import { InputManager } from "@core/InputManager";
 import { DialogueManager } from "@core/DialogueManager";
 import { eventBus, GameEvents } from "@core/EventBus";
+import { InventoryManager } from "@core/InventoryManager";
 import { Player } from "@entities/Player";
 import { Enemy } from "@entities/Enemy";
 import { NPC } from "@entities/NPC";
@@ -14,16 +15,31 @@ import type { DialogueTree } from "@data/types/Dialogue";
 import enemiesData from "@data/definitions/enemies.json";
 import elderDialogue from "@data/definitions/dialogues/elder.json";
 import { EntityType } from "@data/types/Entity";
+import type { ItemRarity, LootRollResult } from "@data/types/Item";
+
+interface GroundLoot {
+  id: string;
+  itemId: string;
+  quantity: number;
+  container: Phaser.GameObjects.Container;
+  label: Phaser.GameObjects.Text;
+  bobTween: Phaser.Tweens.Tween;
+  effectTweens: Phaser.Tweens.Tween[];
+}
 
 export class WorldScene extends Phaser.Scene {
   private mapManager!: MapManager;
   private entityManager!: EntityManager;
   private inputManager!: InputManager;
   private dialogueManager!: DialogueManager;
+  private inventoryManager!: InventoryManager;
   private player!: Player;
   private enemies: Enemy[] = [];
   private npcs: NPC[] = [];
   private projectiles: Projectile[] = [];
+  private enemyTemplateByRuntimeId: Map<string, string> = new Map();
+  private groundLoot: GroundLoot[] = [];
+  private lootSequence: number = 0;
   private currentMapId: string = "meadow";
   private playerClass: string = "warrior";
   private isTransitioning: boolean = false;
@@ -43,6 +59,7 @@ export class WorldScene extends Phaser.Scene {
     this.entityManager = new EntityManager();
     this.inputManager = new InputManager();
     this.dialogueManager = new DialogueManager();
+    this.inventoryManager = InventoryManager.getInstance();
 
     this.inputManager.init(this);
     this.dialogueManager.loadDialogueTree(elderDialogue as unknown as DialogueTree);
@@ -59,9 +76,11 @@ export class WorldScene extends Phaser.Scene {
     this.enemies.forEach((e) => e.destroy());
     this.npcs.forEach((n) => n.destroy());
     this.projectiles.forEach((p) => p.destroy());
+    this.clearGroundLoot();
     this.enemies = [];
     this.npcs = [];
     this.projectiles = [];
+    this.enemyTemplateByRuntimeId.clear();
 
     this.currentMapId = mapId;
     
@@ -110,6 +129,7 @@ export class WorldScene extends Phaser.Scene {
       );
       const enemy = new Enemy(this, entityData, this.mapManager, spawn.patrolRadius);
       this.enemies.push(enemy);
+      this.enemyTemplateByRuntimeId.set(id, spawn.enemyId);
 
       // Add simple collision with player (no longer launches instanced combat)
       this.physics.add.collider(this.player.getSprite(), enemy.getSprite());
@@ -237,6 +257,207 @@ export class WorldScene extends Phaser.Scene {
       const xpGiven = eData.level * 15 + 10;
       this.entityManager.addXp(xpGiven);
       this.showFloatingText(`+${xpGiven} XP`, 0xc8a852, enemy.getSprite().x, enemy.getSprite().y);
+      this.spawnLootForEnemy(enemy);
+    }
+  }
+
+  private spawnLootForEnemy(enemy: Enemy): void {
+    const templateId = this.enemyTemplateByRuntimeId.get(enemy.getData().id);
+    if (!templateId) return;
+
+    const lootEntries = this.inventoryManager.rollLoot(templateId);
+    if (lootEntries.length === 0) return;
+
+    lootEntries.forEach((entry, index) => {
+      const spreadX = Phaser.Math.Between(-18, 18) + index * 8;
+      const spreadY = Phaser.Math.Between(-10, 10);
+      this.createGroundLoot(entry, enemy.getSprite().x + spreadX, enemy.getSprite().y + spreadY);
+    });
+  }
+
+  private createGroundLoot(entry: LootRollResult, x: number, y: number): void {
+    const item = this.inventoryManager.getItemDefinition(entry.itemId);
+    if (!item) return;
+
+    const container = this.add.container(x, y);
+    container.setDepth(y + 20);
+
+    const bg = this.add.rectangle(0, 0, 18, 18, this.getRarityColor(item.rarity), 0.95);
+    bg.setStrokeStyle(2, 0x111111, 0.95);
+
+    const effectTweens = this.addRarityDropEffects(container, item.rarity);
+
+    const icon = this.add.text(0, -0.5, item.icon, {
+      fontFamily: "'Press Start 2P'",
+      fontSize: "8px",
+      color: "#ffffff",
+      stroke: "#000000",
+      strokeThickness: 2,
+    });
+    icon.setOrigin(0.5);
+
+    const label = this.add.text(0, 14, `${item.name} x${entry.quantity}`, {
+      fontFamily: "'Press Start 2P'",
+      fontSize: "7px",
+      color: this.getRarityLabelColor(item.rarity),
+      stroke: "#000000",
+      strokeThickness: 2,
+    });
+    label.setOrigin(0.5, 0);
+
+    container.add([bg, icon, label]);
+
+    const bobTween = this.tweens.add({
+      targets: container,
+      y: container.y - 3,
+      duration: 850,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
+    this.groundLoot.push({
+      id: `loot_${this.currentMapId}_${this.lootSequence++}`,
+      itemId: entry.itemId,
+      quantity: entry.quantity,
+      container,
+      label,
+      bobTween,
+      effectTweens,
+    });
+  }
+
+  private addRarityDropEffects(container: Phaser.GameObjects.Container, rarity: ItemRarity): Phaser.Tweens.Tween[] {
+    const tweens: Phaser.Tweens.Tween[] = [];
+
+    if (rarity === "legendary") {
+      const aura = this.add.circle(0, 0, 13, 0xff6633, 0.25);
+      aura.setBlendMode(Phaser.BlendModes.ADD);
+      container.addAt(aura, 0);
+
+      tweens.push(
+        this.tweens.add({
+          targets: aura,
+          scale: { from: 0.85, to: 1.35 },
+          alpha: { from: 0.3, to: 0.06 },
+          duration: 580,
+          yoyo: true,
+          repeat: -1,
+        })
+      );
+    }
+
+    if (rarity === "mythic") {
+      const auraCore = this.add.circle(0, 0, 12, 0xc946ff, 0.32);
+      auraCore.setBlendMode(Phaser.BlendModes.ADD);
+      const auraOuter = this.add.circle(0, 0, 18, 0xa13dff, 0.14);
+      auraOuter.setBlendMode(Phaser.BlendModes.ADD);
+      const runeRing = this.add.circle(0, 0, 17, 0x000000, 0);
+      runeRing.setStrokeStyle(2, 0xd96dff, 0.65);
+      runeRing.setBlendMode(Phaser.BlendModes.ADD);
+
+      container.addAt(auraOuter, 0);
+      container.addAt(runeRing, 1);
+      container.addAt(auraCore, 2);
+
+      tweens.push(
+        this.tweens.add({
+          targets: auraCore,
+          scale: { from: 0.85, to: 1.22 },
+          alpha: { from: 0.38, to: 0.12 },
+          duration: 430,
+          yoyo: true,
+          repeat: -1,
+        })
+      );
+      tweens.push(
+        this.tweens.add({
+          targets: auraOuter,
+          scale: { from: 0.9, to: 1.28 },
+          alpha: { from: 0.2, to: 0.03 },
+          duration: 760,
+          yoyo: true,
+          repeat: -1,
+        })
+      );
+      tweens.push(
+        this.tweens.add({
+          targets: runeRing,
+          angle: 360,
+          duration: 1800,
+          repeat: -1,
+        })
+      );
+    }
+
+    return tweens;
+  }
+
+  private tryPickupNearbyLoot(): void {
+    const playerPos = this.player.getPixelPosition();
+
+    for (let i = this.groundLoot.length - 1; i >= 0; i--) {
+      const loot = this.groundLoot[i];
+      const distance = Phaser.Math.Distance.Between(playerPos.x, playerPos.y, loot.container.x, loot.container.y);
+      if (distance > 24) continue;
+
+      const item = this.inventoryManager.getItemDefinition(loot.itemId);
+      const result = this.inventoryManager.addItem(loot.itemId, loot.quantity);
+
+      if (result.added > 0 && item) {
+        this.showFloatingText(`+ ${item.name}${result.added > 1 ? ` x${result.added}` : ""}`, 0x7fd7ff, loot.container.x, loot.container.y - 14);
+      }
+
+      if (result.remaining <= 0) {
+        this.destroyLootEntry(i);
+      } else {
+        loot.quantity = result.remaining;
+        if (item) {
+          loot.label.setText(`${item.name} x${loot.quantity}`);
+        }
+        this.showFloatingText("Inventory Full", 0xff7777, playerPos.x, playerPos.y - 30);
+      }
+    }
+  }
+
+  private destroyLootEntry(index: number): void {
+    const loot = this.groundLoot[index];
+    if (!loot) return;
+    loot.bobTween.stop();
+    loot.effectTweens.forEach((effect) => effect.stop());
+    loot.container.destroy();
+    this.groundLoot.splice(index, 1);
+  }
+
+  private clearGroundLoot(): void {
+    for (let i = this.groundLoot.length - 1; i >= 0; i--) {
+      this.destroyLootEntry(i);
+    }
+  }
+
+  private getRarityColor(rarity: ItemRarity): number {
+    switch (rarity) {
+      case "rare":
+        return 0x3f87e0;
+      case "legendary":
+        return 0xef6a2f;
+      case "mythic":
+        return 0xbf43f2;
+      default:
+        return 0x7f8e9a;
+    }
+  }
+
+  private getRarityLabelColor(rarity: ItemRarity): string {
+    switch (rarity) {
+      case "rare":
+        return "#8fbaff";
+      case "legendary":
+        return "#ff9f72";
+      case "mythic":
+        return "#e48cff";
+      default:
+        return "#f2e4be";
     }
   }
 
@@ -340,20 +561,13 @@ export class WorldScene extends Phaser.Scene {
 
     const input = this.inputManager.getState();
 
-    // Pass input to Quick Menu UI as toggle event is handled in UIScene 
-    // or by checking here, but we implemented keydown-Q natively in UIScene.
-    // Pause handled by UIScene so we don't worry about it here
-
     if (!this.dialogueManager.getIsActive() && !this.playerDead) {
       this.player?.handleInput(input);
     }
 
     const pPos = this.player.getPixelPosition();
     this.enemies.forEach((e) => {
-      // Instead of update(delta), we call updateAI
-      if((e as any).updateAI) {
-        (e as any).updateAI(delta, pPos.x, pPos.y, this.playerDead);
-      }
+      e.updateAI(delta, pPos.x, pPos.y, this.playerDead);
     });
     
     this.npcs.forEach((n) => n.update(delta));
@@ -364,6 +578,7 @@ export class WorldScene extends Phaser.Scene {
     this.projectiles.forEach(p => p.update(delta));
 
     if (!this.playerDead) {
+      this.tryPickupNearbyLoot();
       this.checkInteractions(input);
       this.checkMapTransition();
     }
@@ -390,6 +605,10 @@ export class WorldScene extends Phaser.Scene {
     // Projectiles always on top
     this.projectiles.forEach(p => {
       p.getSprite().setDepth(9999);
+    });
+
+    this.groundLoot.forEach((loot) => {
+      loot.container.setDepth(loot.container.y + 20);
     });
   }
 

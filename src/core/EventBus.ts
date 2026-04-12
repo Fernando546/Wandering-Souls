@@ -24,6 +24,7 @@ export enum GameEvents {
   PLAYER_ACTION_SKILL1 = "player:actionSkill1",
   PLAYER_ACTION_SKILL2 = "player:actionSkill2",
   ENEMY_ACTION_ATTACK = "enemy:actionAttack",
+  INVENTORY_UPDATED = "inventory:updated",
 }
 
 class EventBus extends Phaser.Events.EventEmitter {

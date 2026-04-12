@@ -5,8 +5,8 @@ import { UIScene } from "@scenes/UIScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  width: 960,
-  height: 640,
+  width: 1024,
+  height: 672,
   parent: "game-container",
   pixelArt: true,
   backgroundColor: "#0a0a1a",
