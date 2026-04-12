@@ -1,0 +1,82 @@
+{
+  "slime": {
+    "id": "slime",
+    "name": "Green Slime",
+    "level": 1,
+    "stats": {
+      "hp": 40,
+      "maxHp": 40,
+      "mana": 0,
+      "maxMana": 0,
+      "strength": 5,
+      "agility": 3,
+      "intelligence": 1,
+      "armor": 2,
+      "magicResist": 1
+    },
+    "xpReward": 15,
+    "goldReward": 5,
+    "spriteKey": "enemy_slime",
+    "skills": []
+  },
+  "wolf": {
+    "id": "wolf",
+    "name": "Shadow Wolf",
+    "level": 2,
+    "stats": {
+      "hp": 65,
+      "maxHp": 65,
+      "mana": 0,
+      "maxMana": 0,
+      "strength": 10,
+      "agility": 12,
+      "intelligence": 2,
+      "armor": 4,
+      "magicResist": 2
+    },
+    "xpReward": 30,
+    "goldReward": 10,
+    "spriteKey": "enemy_wolf",
+    "skills": []
+  },
+  "bandit": {
+    "id": "bandit",
+    "name": "Forest Bandit",
+    "level": 3,
+    "stats": {
+      "hp": 90,
+      "maxHp": 90,
+      "mana": 10,
+      "maxMana": 10,
+      "strength": 12,
+      "agility": 9,
+      "intelligence": 4,
+      "armor": 8,
+      "magicResist": 3
+    },
+    "xpReward": 50,
+    "goldReward": 20,
+    "spriteKey": "enemy_bandit",
+    "skills": []
+  },
+  "forest_spirit": {
+    "id": "forest_spirit",
+    "name": "Forest Spirit",
+    "level": 4,
+    "stats": {
+      "hp": 70,
+      "maxHp": 70,
+      "mana": 60,
+      "maxMana": 60,
+      "strength": 4,
+      "agility": 8,
+      "intelligence": 14,
+      "armor": 3,
+      "magicResist": 12
+    },
+    "xpReward": 65,
+    "goldReward": 25,
+    "spriteKey": "enemy_spirit",
+    "skills": []
+  }
+}

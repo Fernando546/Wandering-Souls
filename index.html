@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Wandering Souls - A 2D Top-Down RPG Adventure" />
+    <title>Wandering Souls</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/ui/styles.css" />
+  </head>
+  <body>
+    <div id="game-container"></div>
+    <div id="ui-overlay">
+      <div id="hud">
+        <div id="hud-bars">
+          <div class="stat-bar" id="hp-bar-container">
+            <div class="stat-bar-fill" id="hp-bar-fill"></div>
+            <span class="stat-bar-text" id="hp-bar-text">100 / 100</span>
+          </div>
+          <div class="stat-bar" id="mana-bar-container">
+            <div class="stat-bar-fill" id="mana-bar-fill"></div>
+            <span class="stat-bar-text" id="mana-bar-text">50 / 50</span>
+          </div>
+        </div>
+        <div id="hud-info">
+          <span id="hud-level">Lv. 1</span>
+          <div class="stat-bar" id="xp-bar-container">
+            <div class="stat-bar-fill" id="xp-bar-fill"></div>
+            <span class="stat-bar-text" id="xp-bar-text">0 / 100 XP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div id="action-bar" style="position: absolute; bottom: 8px; left: 8px; display: flex; gap: 8px;">
+        <div class="skill-btn" id="skill-primary">
+          <div class="skill-key">LMB</div>
+          <div class="skill-cd" id="cd-primary"></div>
+        </div>
+        <div class="skill-btn" id="skill-1">
+          <div class="skill-key">1</div>
+          <div class="skill-cd" id="cd-q"></div>
+        </div>
+        <div class="skill-btn" id="skill-2">
+          <div class="skill-key">2</div>
+          <div class="skill-cd" id="cd-e"></div>
+        </div>
+      </div>
+
+      <!-- Quick Menu Overlay -->
+      <div id="quick-menu-container" class="hidden">
+        <div class="quick-menu-header">
+          <div class="quick-menu-tabs">
+            <button class="menu-tab active" data-tab="inventory">Inventory</button>
+            <button class="menu-tab" data-tab="status">Status</button>
+            <button class="menu-tab" data-tab="settings">Settings</button>
+          </div>
+          <button class="menu-close-btn">×</button>
+        </div>
+        
+        <div class="quick-menu-content" id="tab-inventory">
+          <div class="inventory-grid" id="inventory-grid">
+            <!-- Slots will be injected via JS -->
+          </div>
+        </div>
+        <div class="quick-menu-content hidden" id="tab-status">
+          <h2 style="color:#c8a852; font-family:'Press Start 2P'; font-size:12px;">Character Status</h2>
+          <p style="color:#ddd; margin-top:10px;">Coming Soon...</p>
+        </div>
+        <div class="quick-menu-content hidden" id="tab-settings">
+          <h2 style="color:#c8a852; font-family:'Press Start 2P'; font-size:12px;">Settings</h2>
+          <p style="color:#ddd; margin-top:10px;">Coming Soon...</p>
+        </div>
+      </div>
+
+      <!-- Dialogue Box -->
+      <div id="dialogue-container" class="hidden">
+        <div id="dialogue-speaker"></div>
+        <div id="dialogue-text"></div>
+        <div id="dialogue-choices"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

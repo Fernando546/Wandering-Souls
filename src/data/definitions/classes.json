@@ -1,0 +1,80 @@
+{
+  "warrior": {
+    "id": "warrior",
+    "name": "Warrior",
+    "description": "A stalwart melee fighter with high durability and physical power.",
+    "baseStats": {
+      "hp": 150,
+      "maxHp": 150,
+      "mana": 30,
+      "maxMana": 30,
+      "strength": 14,
+      "agility": 8,
+      "intelligence": 4,
+      "armor": 12,
+      "magicResist": 4
+    },
+    "statGrowth": {
+      "hp": 18,
+      "mana": 3,
+      "strength": 3,
+      "agility": 1,
+      "intelligence": 0.5,
+      "armor": 2,
+      "magicResist": 0.5
+    },
+    "startingSkillIds": ["warrior_slash", "warrior_shield_bash"]
+  },
+  "archer": {
+    "id": "archer",
+    "name": "Archer",
+    "description": "A swift ranged combatant who relies on precision and speed.",
+    "baseStats": {
+      "hp": 100,
+      "maxHp": 100,
+      "mana": 50,
+      "maxMana": 50,
+      "strength": 8,
+      "agility": 14,
+      "intelligence": 6,
+      "armor": 6,
+      "magicResist": 5
+    },
+    "statGrowth": {
+      "hp": 12,
+      "mana": 5,
+      "strength": 1.5,
+      "agility": 3,
+      "intelligence": 1,
+      "armor": 1,
+      "magicResist": 0.5
+    },
+    "startingSkillIds": ["archer_quick_shot", "archer_piercing_arrow"]
+  },
+  "mage": {
+    "id": "mage",
+    "name": "Mage",
+    "description": "A powerful spellcaster who wields devastating magical forces.",
+    "baseStats": {
+      "hp": 80,
+      "maxHp": 80,
+      "mana": 100,
+      "maxMana": 100,
+      "strength": 4,
+      "agility": 6,
+      "intelligence": 16,
+      "armor": 3,
+      "magicResist": 10
+    },
+    "statGrowth": {
+      "hp": 8,
+      "mana": 10,
+      "strength": 0.5,
+      "agility": 1,
+      "intelligence": 3.5,
+      "armor": 0.5,
+      "magicResist": 2
+    },
+    "startingSkillIds": ["mage_fireball", "mage_frost_bolt"]
+  }
+}

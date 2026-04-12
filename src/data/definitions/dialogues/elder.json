@@ -1,0 +1,46 @@
+{
+  "id": "elder",
+  "startNodeId": "greeting",
+  "nodes": {
+    "greeting": {
+      "id": "greeting",
+      "speaker": "Village Elder",
+      "text": "Ah, a new adventurer! Welcome to Eldermoor. These lands have grown dangerous as of late... creatures stir in the shadows of the forest.",
+      "choices": [
+        { "text": "What happened here?", "nextNodeId": "explain" },
+        { "text": "I'm ready to fight. Any work for me?", "nextNodeId": "quest_offer" },
+        { "text": "Farewell.", "nextNodeId": null }
+      ]
+    },
+    "explain": {
+      "id": "explain",
+      "speaker": "Village Elder",
+      "text": "Strange energies seep from the cave to the north. The forest creatures have become aggressive — wolves, bandits, even the spirits have turned hostile. We need someone brave enough to investigate.",
+      "choices": [
+        { "text": "I'll look into it.", "nextNodeId": "quest_offer" },
+        { "text": "Sounds dangerous... maybe later.", "nextNodeId": null }
+      ]
+    },
+    "quest_offer": {
+      "id": "quest_offer",
+      "speaker": "Village Elder",
+      "text": "Prove your worth first — clear the slimes near the village. Slay 3 of them and return to me. I'll reward you well.",
+      "choices": [
+        {
+          "text": "Consider it done!",
+          "nextNodeId": "quest_accepted",
+          "action": { "type": "startQuest", "value": "slay_slimes" }
+        },
+        { "text": "I need to prepare first.", "nextNodeId": null }
+      ]
+    },
+    "quest_accepted": {
+      "id": "quest_accepted",
+      "speaker": "Village Elder",
+      "text": "Excellent! Be careful out there, young one. The slimes lurk in the meadow to the east. Return when the deed is done.",
+      "choices": [
+        { "text": "On my way!", "nextNodeId": null }
+      ]
+    }
+  }
+}
