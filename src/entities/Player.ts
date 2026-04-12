@@ -140,6 +140,14 @@ export class Player extends BaseEntity {
     }
   }
 
+  stopMovement(): void {
+    if (this.body) {
+      this.body.setVelocity(0, 0);
+      this.isMoving = false;
+      this.updateAnimation();
+    }
+  }
+
   getTilePosition(): { x: number; y: number } {
     return {
       x: Math.floor(this.sprite.x / 32),
