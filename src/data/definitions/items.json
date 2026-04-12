@@ -1,0 +1,139 @@
+{
+  "rusty_sword": {
+    "id": "rusty_sword",
+    "name": "Rusty Sword",
+    "description": "An old blade, but still sharp enough for meadow fights.",
+    "category": "weapon",
+    "rarity": "common",
+    "maxStack": 1,
+    "equipSlot": "weapon",
+    "attackBonus": 4,
+    "icon": "/"
+  },
+  "leather_hood": {
+    "id": "leather_hood",
+    "name": "Leather Hood",
+    "description": "A stitched hood made from wolf hide.",
+    "category": "armor",
+    "rarity": "common",
+    "maxStack": 1,
+    "equipSlot": "helmet",
+    "defenseBonus": 2,
+    "icon": "^"
+  },
+  "traveler_tunic": {
+    "id": "traveler_tunic",
+    "name": "Traveler Tunic",
+    "description": "Light chest armor favored by scouts.",
+    "category": "armor",
+    "rarity": "common",
+    "maxStack": 1,
+    "equipSlot": "chest",
+    "defenseBonus": 3,
+    "icon": "#"
+  },
+  "patched_gloves": {
+    "id": "patched_gloves",
+    "name": "Patched Gloves",
+    "description": "Worn gloves that improve grip on weapons.",
+    "category": "armor",
+    "rarity": "common",
+    "maxStack": 1,
+    "equipSlot": "gloves",
+    "defenseBonus": 1,
+    "icon": "U"
+  },
+  "hide_boots": {
+    "id": "hide_boots",
+    "name": "Hide Boots",
+    "description": "Simple boots hardened with resin.",
+    "category": "armor",
+    "rarity": "common",
+    "maxStack": 1,
+    "equipSlot": "boots",
+    "defenseBonus": 2,
+    "icon": "V"
+  },
+  "moon_band": {
+    "id": "moon_band",
+    "name": "Moon Band",
+    "description": "A ring that hums with spirit energy.",
+    "category": "trinket",
+    "rarity": "rare",
+    "maxStack": 1,
+    "equipSlot": "ring",
+    "attackBonus": 2,
+    "defenseBonus": 2,
+    "icon": "o"
+  },
+  "slime_gel": {
+    "id": "slime_gel",
+    "name": "Slime Gel",
+    "description": "Viscous crafting reagent dropped by slimes.",
+    "category": "material",
+    "rarity": "common",
+    "maxStack": 20,
+    "icon": "*"
+  },
+  "wolf_fang": {
+    "id": "wolf_fang",
+    "name": "Wolf Fang",
+    "description": "A sharp fang used by crafters.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 20,
+    "icon": "f"
+  },
+  "bandit_emblem": {
+    "id": "bandit_emblem",
+    "name": "Bandit Emblem",
+    "description": "Insignia torn from a forest outlaw.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 20,
+    "icon": "e"
+  },
+  "spirit_essence": {
+    "id": "spirit_essence",
+    "name": "Spirit Essence",
+    "description": "Pure mote of ancient woodland magic.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 10,
+    "icon": "s"
+  },
+  "emberfang_blade": {
+    "id": "emberfang_blade",
+    "name": "Emberfang Blade",
+    "description": "A fire-tempered blade feared by outlaw captains.",
+    "category": "weapon",
+    "rarity": "legendary",
+    "maxStack": 1,
+    "equipSlot": "weapon",
+    "attackBonus": 12,
+    "icon": "!"
+  },
+  "wyrmguard_plate": {
+    "id": "wyrmguard_plate",
+    "name": "Wyrmguard Plate",
+    "description": "Dragon-forged chest armor, still warm to the touch.",
+    "category": "armor",
+    "rarity": "legendary",
+    "maxStack": 1,
+    "equipSlot": "chest",
+    "defenseBonus": 10,
+    "icon": "%"
+  },
+  "astral_sigil": {
+    "id": "astral_sigil",
+    "name": "Astral Sigil",
+    "description": "Mythic ring pulsing with violet cosmic energy.",
+    "category": "trinket",
+    "rarity": "mythic",
+    "maxStack": 1,
+    "equipSlot": "ring",
+    "attackBonus": 8,
+    "defenseBonus": 8,
+    "icon": "@"
+  }
+}
