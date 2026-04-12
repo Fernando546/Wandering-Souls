@@ -123,10 +123,20 @@ export class UIScene extends Phaser.Scene {
     sendButton.addEventListener("click", sendMessage);
 
     chatInput.addEventListener("keydown", (event) => {
+      event.stopPropagation();
       if (event.key === "Enter") {
         event.preventDefault();
         sendMessage();
+        chatInput.blur();
       }
+    });
+
+    chatInput.addEventListener("focus", () => {
+      eventBus.emitEvent(GameEvents.INPUT_DISABLED);
+    });
+
+    chatInput.addEventListener("blur", () => {
+      eventBus.emitEvent(GameEvents.INPUT_ENABLED);
     });
 
     this.appendChatMessage("Trade", "WTS Wolf Fang x20", "system");

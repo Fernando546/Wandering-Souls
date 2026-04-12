@@ -46,9 +46,15 @@ export class InputManager {
 
     eventBus.onEvent(GameEvents.INPUT_DISABLED, () => {
       this.enabled = false;
+      if (this.scene && this.scene.input.keyboard) {
+        this.scene.input.keyboard.enabled = false;
+      }
     });
     eventBus.onEvent(GameEvents.INPUT_ENABLED, () => {
       this.enabled = true;
+      if (this.scene && this.scene.input.keyboard) {
+        this.scene.input.keyboard.enabled = true;
+      }
     });
   }
 
