@@ -1,0 +1,14 @@
+{
+  "id": "elder_completed",
+  "startNodeId": "done",
+  "nodes": {
+    "done": {
+      "id": "done",
+      "speaker": "Village Elder",
+      "text": "Your first hunt brought hope back to Eldermoor. Continue your path in the cave.",
+      "choices": [
+        { "text": "I will keep moving.", "nextNodeId": null }
+      ]
+    }
+  }
+}

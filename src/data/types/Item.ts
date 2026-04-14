@@ -12,6 +12,9 @@ export interface ItemDefinition {
   rarity: ItemRarity;
   maxStack: number;
   icon: string;
+  healAmount?: number;
+  buyPrice?: number;
+  sellPrice?: number;
   equipSlot?: EquipmentSlot;
   attackBonus?: number;
   defenseBonus?: number;
@@ -34,6 +37,7 @@ export interface InventoryState {
   bags: BagState[];
   activeBagIndex: number;
   equipment: EquipmentState;
+  currency: number;
 }
 
 export interface LootTableEntry {

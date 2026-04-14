@@ -1,0 +1,26 @@
+{
+  "id": "ruins_scout_turnin",
+  "startNodeId": "turnin",
+  "nodes": {
+    "turnin": {
+      "id": "turnin",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "You survived... and the revenant is gone?",
+      "choices": [
+        {
+          "text": "The revenant has fallen.",
+          "nextNodeId": "done",
+          "action": { "type": "completeQuest", "value": "ruins_overlord_hunt" }
+        }
+      ]
+    },
+    "done": {
+      "id": "done",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "Take this relic. You just ended the sanctum nightmare.",
+      "choices": [
+        { "text": "Mission complete.", "nextNodeId": null }
+      ]
+    }
+  }
+}

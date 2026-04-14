@@ -1,0 +1,14 @@
+{
+  "id": "elder_progress",
+  "startNodeId": "progress",
+  "nodes": {
+    "progress": {
+      "id": "progress",
+      "speaker": "Village Elder",
+      "text": "The meadow must be cleared. Keep hunting until both targets are done: 5 slimes and 5 wolves.",
+      "choices": [
+        { "text": "I am still on it.", "nextNodeId": null }
+      ]
+    }
+  }
+}

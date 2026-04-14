@@ -6,9 +6,10 @@
     "category": "weapon",
     "rarity": "common",
     "maxStack": 1,
+    "buyPrice": 45,
     "equipSlot": "weapon",
     "attackBonus": 4,
-    "icon": "/"
+    "icon": "SW"
   },
   "leather_hood": {
     "id": "leather_hood",
@@ -17,9 +18,10 @@
     "category": "armor",
     "rarity": "common",
     "maxStack": 1,
+    "buyPrice": 35,
     "equipSlot": "helmet",
     "defenseBonus": 2,
-    "icon": "^"
+    "icon": "HD"
   },
   "traveler_tunic": {
     "id": "traveler_tunic",
@@ -28,9 +30,10 @@
     "category": "armor",
     "rarity": "common",
     "maxStack": 1,
+    "buyPrice": 42,
     "equipSlot": "chest",
     "defenseBonus": 3,
-    "icon": "#"
+    "icon": "AR"
   },
   "patched_gloves": {
     "id": "patched_gloves",
@@ -39,9 +42,10 @@
     "category": "armor",
     "rarity": "common",
     "maxStack": 1,
+    "buyPrice": 28,
     "equipSlot": "gloves",
     "defenseBonus": 1,
-    "icon": "U"
+    "icon": "GL"
   },
   "hide_boots": {
     "id": "hide_boots",
@@ -50,9 +54,10 @@
     "category": "armor",
     "rarity": "common",
     "maxStack": 1,
+    "buyPrice": 30,
     "equipSlot": "boots",
     "defenseBonus": 2,
-    "icon": "V"
+    "icon": "BT"
   },
   "moon_band": {
     "id": "moon_band",
@@ -61,10 +66,11 @@
     "category": "trinket",
     "rarity": "rare",
     "maxStack": 1,
+    "buyPrice": 110,
     "equipSlot": "ring",
     "attackBonus": 2,
     "defenseBonus": 2,
-    "icon": "o"
+    "icon": "RG"
   },
   "slime_gel": {
     "id": "slime_gel",
@@ -73,7 +79,8 @@
     "category": "material",
     "rarity": "common",
     "maxStack": 20,
-    "icon": "*"
+    "sellPrice": 3,
+    "icon": "SG"
   },
   "wolf_fang": {
     "id": "wolf_fang",
@@ -82,7 +89,8 @@
     "category": "material",
     "rarity": "rare",
     "maxStack": 20,
-    "icon": "f"
+    "sellPrice": 7,
+    "icon": "WF"
   },
   "bandit_emblem": {
     "id": "bandit_emblem",
@@ -91,7 +99,8 @@
     "category": "material",
     "rarity": "rare",
     "maxStack": 20,
-    "icon": "e"
+    "sellPrice": 9,
+    "icon": "EM"
   },
   "spirit_essence": {
     "id": "spirit_essence",
@@ -100,7 +109,32 @@
     "category": "material",
     "rarity": "rare",
     "maxStack": 10,
-    "icon": "s"
+    "sellPrice": 11,
+    "icon": "ES"
+  },
+  "minor_healing_potion": {
+    "id": "minor_healing_potion",
+    "name": "Minor Healing Potion",
+    "description": "Drink to restore 35 HP.",
+    "category": "consumable",
+    "rarity": "common",
+    "maxStack": 10,
+    "healAmount": 35,
+    "buyPrice": 18,
+    "sellPrice": 6,
+    "icon": "P1"
+  },
+  "greater_healing_potion": {
+    "id": "greater_healing_potion",
+    "name": "Greater Healing Potion",
+    "description": "Drink to restore 80 HP.",
+    "category": "consumable",
+    "rarity": "rare",
+    "maxStack": 10,
+    "healAmount": 80,
+    "buyPrice": 42,
+    "sellPrice": 14,
+    "icon": "P2"
   },
   "emberfang_blade": {
     "id": "emberfang_blade",
@@ -111,7 +145,7 @@
     "maxStack": 1,
     "equipSlot": "weapon",
     "attackBonus": 12,
-    "icon": "!"
+    "icon": "FB"
   },
   "wyrmguard_plate": {
     "id": "wyrmguard_plate",
@@ -122,7 +156,7 @@
     "maxStack": 1,
     "equipSlot": "chest",
     "defenseBonus": 10,
-    "icon": "%"
+    "icon": "PL"
   },
   "astral_sigil": {
     "id": "astral_sigil",
@@ -134,6 +168,112 @@
     "equipSlot": "ring",
     "attackBonus": 8,
     "defenseBonus": 8,
-    "icon": "@"
+    "icon": "MY"
+  },
+  "cave_core": {
+    "id": "cave_core",
+    "name": "Cave Core",
+    "description": "A dense mineral heart from deep tunnel beasts.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 20,
+    "sellPrice": 14,
+    "icon": "CC"
+  },
+  "obsidian_shard": {
+    "id": "obsidian_shard",
+    "name": "Obsidian Shard",
+    "description": "Jagged black crystal used for elite weapon forging.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 20,
+    "sellPrice": 18,
+    "icon": "OB"
+  },
+  "ironclaw_spear": {
+    "id": "ironclaw_spear",
+    "name": "Ironclaw Spear",
+    "description": "A reinforced cave spear with a serrated edge.",
+    "category": "weapon",
+    "rarity": "rare",
+    "maxStack": 1,
+    "equipSlot": "weapon",
+    "attackBonus": 17,
+    "icon": "SP"
+  },
+  "cave_hunter_mail": {
+    "id": "cave_hunter_mail",
+    "name": "Cave Hunter Mail",
+    "description": "Flexible armor layered for ambush-heavy tunnels.",
+    "category": "armor",
+    "rarity": "rare",
+    "maxStack": 1,
+    "equipSlot": "chest",
+    "defenseBonus": 15,
+    "icon": "CM"
+  },
+  "warden_pike": {
+    "id": "warden_pike",
+    "name": "Warden Pike",
+    "description": "Elite pike rewarded for bringing down the Cave Overseer.",
+    "category": "weapon",
+    "rarity": "legendary",
+    "maxStack": 1,
+    "equipSlot": "weapon",
+    "attackBonus": 26,
+    "icon": "WP"
+  },
+  "relic_coin": {
+    "id": "relic_coin",
+    "name": "Relic Coin",
+    "description": "Ancient currency found in the drowned sanctum halls.",
+    "category": "material",
+    "rarity": "rare",
+    "maxStack": 30,
+    "sellPrice": 22,
+    "icon": "RC"
+  },
+  "sentinel_plating": {
+    "id": "sentinel_plating",
+    "name": "Sentinel Plating",
+    "description": "Heavy metal plates ripped from ashen guardians.",
+    "category": "material",
+    "rarity": "legendary",
+    "maxStack": 10,
+    "sellPrice": 55,
+    "icon": "PT"
+  },
+  "aegis_of_ruin": {
+    "id": "aegis_of_ruin",
+    "name": "Aegis of Ruin",
+    "description": "Sanctum-forged chestplate that shrugs off brutal hits.",
+    "category": "armor",
+    "rarity": "legendary",
+    "maxStack": 1,
+    "equipSlot": "chest",
+    "defenseBonus": 24,
+    "icon": "AG"
+  },
+  "crown_of_ashes": {
+    "id": "crown_of_ashes",
+    "name": "Crown of Ashes",
+    "description": "A mythic helm pulsing with extinguished starfire.",
+    "category": "armor",
+    "rarity": "mythic",
+    "maxStack": 1,
+    "equipSlot": "helmet",
+    "defenseBonus": 30,
+    "icon": "CA"
+  },
+  "duskreaver": {
+    "id": "duskreaver",
+    "name": "Duskreaver",
+    "description": "Mythic voidblade from the Revenant's final chamber.",
+    "category": "weapon",
+    "rarity": "mythic",
+    "maxStack": 1,
+    "equipSlot": "weapon",
+    "attackBonus": 38,
+    "icon": "DR"
   }
 }

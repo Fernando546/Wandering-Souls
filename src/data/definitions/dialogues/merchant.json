@@ -1,0 +1,44 @@
+{
+  "id": "merchant",
+  "startNodeId": "shop",
+  "nodes": {
+    "shop": {
+      "id": "shop",
+      "speaker": "Quartermaster Rurik",
+      "text": "Materials, tools, and fresh gear. I pay coins for neutral materials and sell starter equipment.",
+      "choices": [
+        {
+          "text": "Sell all neutral materials",
+          "nextNodeId": "shop",
+          "action": { "type": "sellNeutral", "value": "all" }
+        },
+        {
+          "text": "Buy Rusty Sword (45)",
+          "nextNodeId": "shop",
+          "action": { "type": "buyItem", "value": "rusty_sword" }
+        },
+        {
+          "text": "Buy Leather Hood (35)",
+          "nextNodeId": "shop",
+          "action": { "type": "buyItem", "value": "leather_hood" }
+        },
+        {
+          "text": "Buy Traveler Tunic (42)",
+          "nextNodeId": "shop",
+          "action": { "type": "buyItem", "value": "traveler_tunic" }
+        },
+        {
+          "text": "Buy Patched Gloves (28)",
+          "nextNodeId": "shop",
+          "action": { "type": "buyItem", "value": "patched_gloves" }
+        },
+        {
+          "text": "Buy Hide Boots (30)",
+          "nextNodeId": "shop",
+          "action": { "type": "buyItem", "value": "hide_boots" }
+        },
+        { "text": "Leave", "nextNodeId": null }
+      ]
+    }
+  }
+}

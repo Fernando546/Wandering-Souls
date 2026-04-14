@@ -22,6 +22,25 @@ interface InventoryActionResult {
   message?: string;
 }
 
+export interface SellNeutralResult {
+  soldStacks: number;
+  soldItems: number;
+  currencyEarned: number;
+}
+
+export interface BuyItemResult {
+  success: boolean;
+  message: string;
+  currencySpent?: number;
+}
+
+export interface ConsumeBagItemResult {
+  success: boolean;
+  message: string;
+  itemId?: string;
+  quantityConsumed?: number;
+}
+
 const BAG_SIZE = 12;
 
 const EQUIPMENT_SLOTS: EquipmentSlot[] = ["weapon", "helmet", "chest", "gloves", "boots", "ring"];
@@ -41,6 +60,7 @@ export class InventoryManager {
       bags: this.createDefaultBags(),
       activeBagIndex: 0,
       equipment: this.createDefaultEquipment(),
+      currency: 75,
     };
   }
 
@@ -64,7 +84,18 @@ export class InventoryManager {
         slots: bag.slots.map((slot) => ({ ...slot })),
       })),
       equipment: { ...this.state.equipment },
+      currency: this.state.currency,
     };
+  }
+
+  getCurrency(): number {
+    return this.state.currency;
+  }
+
+  addCurrency(amount: number): void {
+    if (amount <= 0) return;
+    this.state.currency += Math.floor(amount);
+    this.emitStateChanged();
   }
 
   setActiveBag(index: number): void {
@@ -73,7 +104,7 @@ export class InventoryManager {
     this.emitStateChanged();
   }
 
-  addItem(itemId: string, quantity: number): AddItemResult {
+  addItem(itemId: string, quantity: number, emitChange: boolean = true): AddItemResult {
     const definition = this.itemDefinitions[itemId];
     if (!definition || quantity <= 0) {
       return { added: 0, remaining: Math.max(quantity, 0) };
@@ -108,7 +139,7 @@ export class InventoryManager {
     }
 
     const added = quantity - remaining;
-    if (added > 0) {
+    if (added > 0 && emitChange) {
       this.emitStateChanged();
     }
 
@@ -163,6 +194,102 @@ export class InventoryManager {
 
     this.emitStateChanged();
     return { success: true };
+  }
+
+  sellAllNeutralItems(): SellNeutralResult {
+    let soldStacks = 0;
+    let soldItems = 0;
+    let currencyEarned = 0;
+
+    for (const bag of this.state.bags) {
+      for (const slot of bag.slots) {
+        if (!slot.itemId || slot.quantity <= 0) continue;
+
+        const definition = this.itemDefinitions[slot.itemId];
+        if (!definition || definition.category !== "material") continue;
+
+        const unitPrice = this.getSellPrice(definition);
+        soldStacks += 1;
+        soldItems += slot.quantity;
+        currencyEarned += slot.quantity * unitPrice;
+
+        slot.itemId = null;
+        slot.quantity = 0;
+      }
+    }
+
+    if (currencyEarned > 0) {
+      this.state.currency += currencyEarned;
+      this.emitStateChanged();
+    }
+
+    return { soldStacks, soldItems, currencyEarned };
+  }
+
+  buyShopItem(itemId: string, quantity: number = 1): BuyItemResult {
+    const definition = this.itemDefinitions[itemId];
+    if (!definition) {
+      return { success: false, message: "Unknown item." };
+    }
+
+    if (quantity <= 0) {
+      return { success: false, message: "Invalid quantity." };
+    }
+
+    if (!this.canFitItemQuantity(itemId, quantity)) {
+      return { success: false, message: "Not enough inventory space." };
+    }
+
+    const totalPrice = this.getBuyPrice(definition) * quantity;
+    if (this.state.currency < totalPrice) {
+      return { success: false, message: "Not enough coins." };
+    }
+
+    const addResult = this.addItem(itemId, quantity, false);
+    if (addResult.added !== quantity || addResult.remaining > 0) {
+      return { success: false, message: "Could not place item in inventory." };
+    }
+
+    this.state.currency -= totalPrice;
+    this.emitStateChanged();
+    return {
+      success: true,
+      message: `Purchased ${definition.name}.`,
+      currencySpent: totalPrice,
+    };
+  }
+
+  consumeBagItem(bagIndex: number, slotIndex: number, quantity: number = 1): ConsumeBagItemResult {
+    const bagSlot = this.getBagSlot(bagIndex, slotIndex);
+    if (!bagSlot || bagSlot.itemId === null || bagSlot.quantity <= 0) {
+      return { success: false, message: "No item in selected slot." };
+    }
+
+    if (quantity <= 0) {
+      return { success: false, message: "Invalid quantity." };
+    }
+
+    const definition = this.itemDefinitions[bagSlot.itemId];
+    if (!definition || definition.category !== "consumable") {
+      return { success: false, message: "This item cannot be consumed." };
+    }
+
+    const consumeCount = Math.min(quantity, bagSlot.quantity);
+    bagSlot.quantity -= consumeCount;
+    const consumedItemId = bagSlot.itemId;
+
+    if (bagSlot.quantity <= 0) {
+      bagSlot.itemId = null;
+      bagSlot.quantity = 0;
+    }
+
+    this.emitStateChanged();
+    return {
+      success: true,
+      message: `Used ${definition.name}.`,
+      itemId: consumedItemId,
+      quantityConsumed: consumeCount,
+    };
   }
 
   equipFromBag(bagIndex: number, slotIndex: number, equipmentSlot: EquipmentSlot): InventoryActionResult {
@@ -357,6 +484,67 @@ export class InventoryManager {
 
     slot.quantity += quantity;
     return true;
+  }
+
+  private canFitItemQuantity(itemId: string, quantity: number): boolean {
+    const definition = this.itemDefinitions[itemId];
+    if (!definition || quantity <= 0) return false;
+
+    let freeCapacity = 0;
+
+    for (const bag of this.state.bags) {
+      for (const slot of bag.slots) {
+        if (slot.itemId === itemId) {
+          freeCapacity += Math.max(0, definition.maxStack - slot.quantity);
+        } else if (slot.itemId === null) {
+          freeCapacity += definition.maxStack;
+        }
+
+        if (freeCapacity >= quantity) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private getSellPrice(definition: ItemDefinition): number {
+    if (definition.sellPrice !== undefined) {
+      return Math.max(1, Math.floor(definition.sellPrice));
+    }
+
+    switch (definition.rarity) {
+      case "rare":
+        return 8;
+      case "legendary":
+        return 60;
+      case "mythic":
+        return 120;
+      default:
+        return 3;
+    }
+  }
+
+  private getBuyPrice(definition: ItemDefinition): number {
+    if (definition.buyPrice !== undefined) {
+      return Math.max(1, Math.floor(definition.buyPrice));
+    }
+
+    if (definition.maxStack > 1) {
+      return this.getSellPrice(definition) * 2;
+    }
+
+    switch (definition.rarity) {
+      case "rare":
+        return 90;
+      case "legendary":
+        return 450;
+      case "mythic":
+        return 900;
+      default:
+        return definition.category === "weapon" || definition.category === "armor" ? 65 : 30;
+    }
   }
 
   private emitStateChanged(): void {

@@ -57,10 +57,14 @@ export class DialogueManager {
         eventBus.emitEvent(GameEvents.PLAYER_HEALED, choice.action.value);
         break;
       case "startQuest":
-        break;
+      case "completeQuest":
       case "giveItem":
+      case "sellNeutral":
+      case "buyItem":
         break;
     }
+
+    eventBus.emitEvent(GameEvents.DIALOGUE_ACTION, choice.action);
   }
 
   endDialogue(): void {

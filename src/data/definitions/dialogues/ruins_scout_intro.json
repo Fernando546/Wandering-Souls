@@ -1,0 +1,27 @@
+{
+  "id": "ruins_scout_intro",
+  "startNodeId": "offer",
+  "nodes": {
+    "offer": {
+      "id": "offer",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "Welcome to the Sunken Sanctum. The Void Revenant at the far shrine is the source of the corruption.",
+      "choices": [
+        {
+          "text": "I will kill the Void Revenant.",
+          "nextNodeId": "accepted",
+          "action": { "type": "startQuest", "value": "ruins_overlord_hunt" }
+        },
+        { "text": "I need to scout first.", "nextNodeId": null }
+      ]
+    },
+    "accepted": {
+      "id": "accepted",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "Good luck. It is stronger than anything in the cave.",
+      "choices": [
+        { "text": "I am ready.", "nextNodeId": null }
+      ]
+    }
+  }
+}

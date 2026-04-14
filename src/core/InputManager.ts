@@ -46,16 +46,14 @@ export class InputManager {
 
     eventBus.onEvent(GameEvents.INPUT_DISABLED, () => {
       this.enabled = false;
-      if (this.scene && this.scene.input.keyboard) {
-        this.scene.input.keyboard.enabled = false;
-      }
+      this.resetKeyStates();
     });
     eventBus.onEvent(GameEvents.INPUT_ENABLED, () => {
       this.enabled = true;
-      if (this.scene && this.scene.input.keyboard) {
-        this.scene.input.keyboard.enabled = true;
-      }
+      this.resetKeyStates();
     });
+
+    scene.game.events.on(Phaser.Core.Events.BLUR, this.handleGameBlur, this);
   }
 
   getState(): InputState {
@@ -96,5 +94,17 @@ export class InputManager {
 
   setEnabled(value: boolean): void {
     this.enabled = value;
+    if (!value) {
+      this.resetKeyStates();
+    }
+  }
+
+  private handleGameBlur(): void {
+    this.resetKeyStates();
+  }
+
+  private resetKeyStates(): void {
+    if (!this.scene?.input.keyboard) return;
+    this.scene.input.keyboard.resetKeys();
   }
 }

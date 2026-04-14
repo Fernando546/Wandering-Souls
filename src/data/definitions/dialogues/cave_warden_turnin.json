@@ -1,0 +1,26 @@
+{
+  "id": "cave_warden_turnin",
+  "startNodeId": "turnin",
+  "nodes": {
+    "turnin": {
+      "id": "turnin",
+      "speaker": "Cave Warden Lysa",
+      "text": "Solid work. The entrance is secure again.",
+      "choices": [
+        {
+          "text": "The cave packs are gone.",
+          "nextNodeId": "done",
+          "action": { "type": "completeQuest", "value": "cave_purge" }
+        }
+      ]
+    },
+    "done": {
+      "id": "done",
+      "speaker": "Cave Warden Lysa",
+      "text": "Take your reward. We can now focus on the elite deeper inside.",
+      "choices": [
+        { "text": "Understood.", "nextNodeId": null }
+      ]
+    }
+  }
+}

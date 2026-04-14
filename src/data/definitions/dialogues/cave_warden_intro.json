@@ -1,0 +1,27 @@
+{
+  "id": "cave_warden_intro",
+  "startNodeId": "offer",
+  "nodes": {
+    "offer": {
+      "id": "offer",
+      "speaker": "Cave Warden Lysa",
+      "text": "You made it into the cave. We need this entrance secured. Hunt 4 bandits and 4 wolves inside these tunnels.",
+      "choices": [
+        {
+          "text": "I will clear them out.",
+          "nextNodeId": "accepted",
+          "action": { "type": "startQuest", "value": "cave_purge" }
+        },
+        { "text": "Give me a moment.", "nextNodeId": null }
+      ]
+    },
+    "accepted": {
+      "id": "accepted",
+      "speaker": "Cave Warden Lysa",
+      "text": "Good. Return after both packs are handled.",
+      "choices": [
+        { "text": "On it.", "nextNodeId": null }
+      ]
+    }
+  }
+}

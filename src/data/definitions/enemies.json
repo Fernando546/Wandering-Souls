@@ -78,5 +78,85 @@
     "goldReward": 25,
     "spriteKey": "enemy_spirit",
     "skills": []
+  },
+  "cave_overseer": {
+    "id": "cave_overseer",
+    "name": "Cave Overseer",
+    "level": 6,
+    "stats": {
+      "hp": 340,
+      "maxHp": 340,
+      "mana": 40,
+      "maxMana": 40,
+      "strength": 24,
+      "agility": 16,
+      "intelligence": 10,
+      "armor": 13,
+      "magicResist": 9
+    },
+    "xpReward": 220,
+    "goldReward": 90,
+    "spriteKey": "enemy_cave_overseer",
+    "skills": []
+  },
+  "ruin_stalker": {
+    "id": "ruin_stalker",
+    "name": "Ruin Stalker",
+    "level": 7,
+    "stats": {
+      "hp": 160,
+      "maxHp": 160,
+      "mana": 0,
+      "maxMana": 0,
+      "strength": 22,
+      "agility": 20,
+      "intelligence": 7,
+      "armor": 10,
+      "magicResist": 8
+    },
+    "xpReward": 95,
+    "goldReward": 42,
+    "spriteKey": "enemy_ruin_stalker",
+    "skills": []
+  },
+  "ashen_sentinel": {
+    "id": "ashen_sentinel",
+    "name": "Ashen Sentinel",
+    "level": 8,
+    "stats": {
+      "hp": 230,
+      "maxHp": 230,
+      "mana": 20,
+      "maxMana": 20,
+      "strength": 27,
+      "agility": 11,
+      "intelligence": 11,
+      "armor": 18,
+      "magicResist": 12
+    },
+    "xpReward": 135,
+    "goldReward": 58,
+    "spriteKey": "enemy_ashen_sentinel",
+    "skills": []
+  },
+  "void_revenant": {
+    "id": "void_revenant",
+    "name": "Void Revenant",
+    "level": 11,
+    "stats": {
+      "hp": 620,
+      "maxHp": 620,
+      "mana": 140,
+      "maxMana": 140,
+      "strength": 38,
+      "agility": 24,
+      "intelligence": 32,
+      "armor": 22,
+      "magicResist": 26
+    },
+    "xpReward": 520,
+    "goldReward": 260,
+    "spriteKey": "enemy_void_revenant",
+    "skills": []
   }
 }

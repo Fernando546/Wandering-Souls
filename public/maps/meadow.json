@@ -2625,6 +2625,31 @@
           ]
         },
         {
+          "name": "npcSpawn",
+          "type": "npc",
+          "x": 544,
+          "y": 448,
+          "width": 32,
+          "height": 32,
+          "properties": [
+            {
+              "name": "npcId",
+              "type": "string",
+              "value": "trader"
+            },
+            {
+              "name": "dialogueTreeId",
+              "type": "string",
+              "value": "merchant"
+            },
+            {
+              "name": "npcName",
+              "type": "string",
+              "value": "Quartermaster Rurik"
+            }
+          ]
+        },
+        {
           "name": "transition",
           "type": "transition",
           "x": 448,
