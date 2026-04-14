@@ -638,6 +638,7 @@ export class WorldScene extends Phaser.Scene {
       npc.showInteractionPrompt(inRange);
 
       if (inRange && input.interact && !interacted) {
+        this.player.stopMovement();
         this.dialogueManager.startDialogue(npc.getDialogueTreeId());
         interacted = true;
       }
@@ -651,6 +652,7 @@ export class WorldScene extends Phaser.Scene {
       const pTile = this.player.getTilePosition();
       for (const obj of data.interactables) {
         if (pTile.x >= obj.x && pTile.x < obj.x + obj.width && pTile.y >= obj.y && pTile.y < obj.y + obj.height) {
+          this.player.stopMovement();
           // Trigger dialogue UI with message
           document.getElementById("dialogue-container")?.classList.remove("hidden");
           document.getElementById("dialogue-speaker")!.textContent = "System";

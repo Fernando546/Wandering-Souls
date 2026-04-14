@@ -170,12 +170,6 @@ export class BootScene extends Phaser.Scene {
     ctx.fillRect(160, 29, 32, 3);
 
     // --- Tile 6: Tree/bush decor (GID 7) — sits on grass ---
-    // Base grass
-    const gd2 = ctx.createLinearGradient(192, 0, 192, 32);
-    gd2.addColorStop(0, "#5a9a4a");
-    gd2.addColorStop(1, "#4a8a3a");
-    ctx.fillStyle = gd2;
-    ctx.fillRect(192, 0, 32, 32);
     // Tree trunk (3/4 — you see the front)
     ctx.fillStyle = "#5a3a1a";
     ctx.fillRect(192 + 12, 16, 8, 16);
