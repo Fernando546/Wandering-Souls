@@ -110,13 +110,6 @@ export class Player extends BaseEntity {
     const nextTileX = Math.floor(nextPixelX / 32);
     const nextTileY = Math.floor(nextPixelY / 32);
 
-    if (vx !== 0 && this.mapManager.getCollisionAt(Math.floor((this.sprite.x + vx * (1 / 60) + (vx > 0 ? 12 : -12)) / 32), Math.floor(this.sprite.y / 32))) {
-      vx = 0;
-    }
-    if (vy !== 0 && this.mapManager.getCollisionAt(Math.floor(this.sprite.x / 32), Math.floor((this.sprite.y + vy * (1 / 60) + (vy > 0 ? 12 : -12)) / 32))) {
-      vy = 0;
-    }
-
     this.body.setVelocity(vx, vy);
 
     this.data.position.x = nextTileX;

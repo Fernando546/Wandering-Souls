@@ -74,6 +74,7 @@ export class WorldScene extends Phaser.Scene {
   private ruinsEliteKills: number = 0;
   private blockedTransitionMessageAt: number = -99999;
   private transitionMarkers: Phaser.GameObjects.GameObject[] = [];
+  private mapColliders!: Phaser.Physics.Arcade.StaticGroup;
 
   constructor() {
     super({ key: "WorldScene" });
@@ -134,10 +135,21 @@ export class WorldScene extends Phaser.Scene {
     
     // Clean up old decor sprites from previous map
     this.mapManager.cleanup();
+    if (this.mapColliders) {
+      this.mapColliders.clear(true, true);
+    } else {
+      this.mapColliders = this.physics.add.staticGroup();
+    }
     
     // ExtractedData is obtained straight from the Tiled JSON now
     const mapData = this.mapManager.buildTilemap(this, mapId, "tileset");
     if (!mapData) return;
+
+    mapData.collisionBoxes.forEach(box => {
+      const zone = this.add.zone(box.x + box.width / 2, box.y + box.height / 2, box.width, box.height);
+      this.physics.add.existing(zone, true);
+      this.mapColliders.add(zone);
+    });
 
     const worldWidth = mapData.width * mapData.tileSize;
     const worldHeight = mapData.height * mapData.tileSize;
@@ -156,6 +168,8 @@ export class WorldScene extends Phaser.Scene {
     } else {
       this.player.getSprite().setPosition(spawnPos.x * 32 + 16, spawnPos.y * 32 + 16);
     }
+
+    this.physics.add.collider(this.player.getSprite(), this.mapColliders);
 
     this.spawnEnemies(mapData.enemySpawns);
     this.spawnNpcs(mapData.npcSpawns);
@@ -212,6 +226,7 @@ export class WorldScene extends Phaser.Scene {
 
       // Add simple collision with player (no longer launches instanced combat)
       this.physics.add.collider(this.player.getSprite(), enemy.getSprite());
+      this.physics.add.collider(enemy.getSprite(), this.mapColliders);
     });
   }
 
@@ -739,7 +754,6 @@ export class WorldScene extends Phaser.Scene {
     
     this.npcs.forEach((n) => n.update(delta));
     this.player.update(delta);
-    this.resolvePlayerStuckState();
     
     // Projectiles
     this.projectiles = this.projectiles.filter(p => !p.getIsDead());
@@ -755,83 +769,6 @@ export class WorldScene extends Phaser.Scene {
     this.updateDepthSorting();
     
     this.updateActionUI();
-  }
-
-  private resolvePlayerStuckState(): void {
-    const sprite = this.player.getSprite();
-    const body = sprite.body as Phaser.Physics.Arcade.Body | undefined;
-    if (!body) return;
-
-    const worldSize = this.mapManager.getWorldSizePixels();
-    if (!worldSize) return;
-
-    const halfW = Math.max(8, body.width * 0.45);
-    const halfH = Math.max(8, body.height * 0.45);
-
-    const clampedX = Phaser.Math.Clamp(sprite.x, halfW, worldSize.width - halfW);
-    const clampedY = Phaser.Math.Clamp(sprite.y, halfH, worldSize.height - halfH);
-    if (clampedX !== sprite.x || clampedY !== sprite.y) {
-      sprite.setPosition(clampedX, clampedY);
-      body.setVelocity(0, 0);
-    }
-
-    if (!this.isPlayerBlockedAt(sprite.x, sprite.y, halfW, halfH)) {
-      return;
-    }
-
-    let found: { x: number; y: number } | null = null;
-    const step = 4;
-    const maxRadius = 96;
-
-    for (let radius = step; radius <= maxRadius && !found; radius += step) {
-      for (let ox = -radius; ox <= radius; ox += step) {
-        const topY = -radius;
-        const bottomY = radius;
-        if (!this.isPlayerBlockedAt(sprite.x + ox, sprite.y + topY, halfW, halfH)) {
-          found = { x: sprite.x + ox, y: sprite.y + topY };
-          break;
-        }
-        if (!this.isPlayerBlockedAt(sprite.x + ox, sprite.y + bottomY, halfW, halfH)) {
-          found = { x: sprite.x + ox, y: sprite.y + bottomY };
-          break;
-        }
-      }
-
-      for (let oy = -radius + step; oy <= radius - step && !found; oy += step) {
-        const leftX = -radius;
-        const rightX = radius;
-        if (!this.isPlayerBlockedAt(sprite.x + leftX, sprite.y + oy, halfW, halfH)) {
-          found = { x: sprite.x + leftX, y: sprite.y + oy };
-          break;
-        }
-        if (!this.isPlayerBlockedAt(sprite.x + rightX, sprite.y + oy, halfW, halfH)) {
-          found = { x: sprite.x + rightX, y: sprite.y + oy };
-          break;
-        }
-      }
-    }
-
-    if (found) {
-      sprite.setPosition(found.x, found.y);
-      body.setVelocity(0, 0);
-      this.showFloatingText("Unstuck", 0x8ee7ff, found.x, found.y - 26);
-    }
-  }
-
-  private isPlayerBlockedAt(pixelX: number, pixelY: number, halfW: number, halfH: number): boolean {
-    const samples = [
-      { x: 0, y: 0 },
-      { x: -halfW, y: -halfH },
-      { x: halfW, y: -halfH },
-      { x: -halfW, y: halfH },
-      { x: halfW, y: halfH },
-      { x: 0, y: -halfH },
-      { x: 0, y: halfH },
-      { x: -halfW, y: 0 },
-      { x: halfW, y: 0 },
-    ];
-
-    return samples.some((sample) => this.mapManager.isPixelBlocked(pixelX + sample.x, pixelY + sample.y));
   }
 
   private updateDepthSorting(): void {

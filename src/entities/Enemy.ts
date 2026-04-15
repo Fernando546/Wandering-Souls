@@ -112,17 +112,6 @@ export class Enemy extends BaseEntity {
       let vx = desiredVx;
       let vy = desiredVy;
 
-      if (this.isBlockedAt(this.sprite.x + desiredVx * dt, this.sprite.y + desiredVy * dt)) {
-        if (!this.isBlockedAt(this.sprite.x + desiredVx * dt, this.sprite.y)) {
-          vy = 0;
-        } else if (!this.isBlockedAt(this.sprite.x, this.sprite.y + desiredVy * dt)) {
-          vx = 0;
-        } else {
-          vx = 0;
-          vy = 0;
-        }
-      }
-
       this.body.setVelocity(vx, vy);
     } else if (!this.isAttacking) {
       // Idle / Stop
@@ -176,23 +165,6 @@ export class Enemy extends BaseEntity {
     return this.body;
   }
 
-  private isBlockedAt(pixelX: number, pixelY: number): boolean {
-    const samples = [
-      { x: 0, y: 0 },
-      { x: -9, y: -9 },
-      { x: 9, y: -9 },
-      { x: -9, y: 9 },
-      { x: 9, y: 9 },
-    ];
-
-    for (const sample of samples) {
-      if (this.mapManager.isPixelBlocked(pixelX + sample.x, pixelY + sample.y)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
 
   // To interface with old implementation temporarily
   update(_delta: number): void {}
