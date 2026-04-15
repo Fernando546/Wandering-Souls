@@ -10,6 +10,7 @@ export class BootScene extends Phaser.Scene {
     this.generatePlaceholderAssets();
     this.load.tilemapTiledJSON('meadow', '/maps/meadow.json');
     this.load.tilemapTiledJSON('cave', '/maps/cave.json');
+    this.load.tilemapTiledJSON('ruins', '/maps/ruins.json');
   }
 
   private createLoadingBar(): void {
@@ -56,8 +57,41 @@ export class BootScene extends Phaser.Scene {
     this.generatePlayerSprite();
     this.generateEnemySprites();
     this.generateNpcSprite();
+    this.generateTransitionMarkers();
     this.generateCombatBackground();
     this.generateCombatEffects();
+  }
+
+  private generateTransitionMarkers(): void {
+    const caveEntrance = document.createElement("canvas");
+    caveEntrance.width = 96;
+    caveEntrance.height = 40;
+    const ctx = caveEntrance.getContext("2d")!;
+
+    const stoneGrad = ctx.createLinearGradient(0, 0, 0, 40);
+    stoneGrad.addColorStop(0, "#5d6677");
+    stoneGrad.addColorStop(1, "#2e3442");
+    ctx.fillStyle = stoneGrad;
+    ctx.fillRect(0, 8, 96, 32);
+
+    ctx.fillStyle = "#1a1f2a";
+    ctx.beginPath();
+    ctx.moveTo(18, 38);
+    ctx.quadraticCurveTo(48, 2, 78, 38);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(0,0,0,0.38)";
+    ctx.fillRect(0, 34, 96, 6);
+
+    ctx.fillStyle = "rgba(240, 212, 138, 0.85)";
+    ctx.fillRect(6, 12, 10, 3);
+    ctx.fillRect(80, 12, 10, 3);
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.fillRect(7, 11, 8, 1);
+    ctx.fillRect(81, 11, 8, 1);
+
+    this.textures.addCanvas("marker_cave_entrance", caveEntrance);
   }
 
   // ─── 3/4 Perspective Tileset ─────────────────────────────────
@@ -343,6 +377,10 @@ export class BootScene extends Phaser.Scene {
     this.generateEnemySprite("enemy_wolf", "#888888", "wolf");
     this.generateEnemySprite("enemy_bandit", "#cc6644", "bandit");
     this.generateEnemySprite("enemy_spirit", "#88aaff", "spirit");
+    this.generateEnemySprite("enemy_cave_overseer", "#7f2f19", "elite_knight");
+    this.generateEnemySprite("enemy_ruin_stalker", "#5d7968", "stalker");
+    this.generateEnemySprite("enemy_ashen_sentinel", "#8e7d66", "sentinel");
+    this.generateEnemySprite("enemy_void_revenant", "#9c4dff", "revenant");
   }
 
   private generateEnemySprite(key: string, color: string, type: string): void {
@@ -508,6 +546,98 @@ export class BootScene extends Phaser.Scene {
       ctx.beginPath();
       ctx.ellipse(20, 12, 1.5, 1.5, 0, 0, Math.PI * 2);
       ctx.fill();
+    } else if (type === "elite_knight") {
+      ctx.fillStyle = "#5f4732";
+      ctx.fillRect(10, 26, 5, 4);
+      ctx.fillRect(17, 26, 5, 4);
+      ctx.fillStyle = "#4b4039";
+      ctx.fillRect(10, 20, 5, 7);
+      ctx.fillRect(17, 20, 5, 7);
+      const armorGrad = ctx.createLinearGradient(0, 10, 0, 22);
+      armorGrad.addColorStop(0, color);
+      armorGrad.addColorStop(1, "#4f2014");
+      ctx.fillStyle = armorGrad;
+      ctx.fillRect(8, 10, 16, 12);
+      ctx.fillStyle = "#d9b082";
+      ctx.fillRect(7, 13, 3, 7);
+      ctx.fillRect(22, 13, 3, 7);
+      ctx.fillStyle = "#c0a37b";
+      ctx.beginPath();
+      ctx.ellipse(16, 6, 6, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#20170f";
+      ctx.fillRect(12, 2, 8, 4);
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(13, 6, 2, 2);
+      ctx.fillRect(18, 6, 2, 2);
+      ctx.fillStyle = "#b6c0d4";
+      ctx.fillRect(24, 11, 2, 12);
+      ctx.fillRect(23, 10, 4, 2);
+    } else if (type === "stalker") {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.ellipse(16, 17, 11, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#4c6357";
+      ctx.beginPath();
+      ctx.ellipse(9, 11, 6, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#89c0a4";
+      ctx.fillRect(5, 11, 3, 2);
+      ctx.fillRect(10, 11, 3, 2);
+      ctx.fillStyle = "#111";
+      ctx.fillRect(6, 11, 1, 2);
+      ctx.fillRect(11, 11, 1, 2);
+      ctx.fillStyle = "#4a5d4f";
+      ctx.fillRect(8, 23, 3, 7);
+      ctx.fillRect(15, 23, 3, 7);
+      ctx.fillRect(22, 22, 3, 6);
+    } else if (type === "sentinel") {
+      ctx.fillStyle = "#5a4f46";
+      ctx.fillRect(10, 25, 5, 5);
+      ctx.fillRect(17, 25, 5, 5);
+      ctx.fillStyle = color;
+      ctx.fillRect(8, 10, 16, 13);
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
+      ctx.fillRect(9, 11, 2, 11);
+      ctx.fillStyle = "#ccb08a";
+      ctx.fillRect(7, 12, 3, 8);
+      ctx.fillRect(22, 12, 3, 8);
+      ctx.fillStyle = "#c9b193";
+      ctx.beginPath();
+      ctx.ellipse(16, 6, 6, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#3a322d";
+      ctx.fillRect(11, 2, 10, 4);
+      ctx.fillStyle = "#000";
+      ctx.fillRect(13, 6, 2, 2);
+      ctx.fillRect(18, 6, 2, 2);
+    } else if (type === "revenant") {
+      ctx.globalAlpha = 0.75;
+      const revGrad = ctx.createLinearGradient(0, 4, 0, 28);
+      revGrad.addColorStop(0, "#b472ff");
+      revGrad.addColorStop(1, "#5c1ea4");
+      ctx.fillStyle = revGrad;
+      ctx.beginPath();
+      ctx.ellipse(16, 14, 11, 11, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(5, 18);
+      ctx.quadraticCurveTo(10, 31, 16, 25);
+      ctx.quadraticCurveTo(22, 31, 27, 18);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#f4dcff";
+      ctx.fillRect(11, 10, 3, 3);
+      ctx.fillRect(18, 10, 3, 3);
+      ctx.fillStyle = "#2a053f";
+      ctx.fillRect(12, 11, 1, 2);
+      ctx.fillRect(19, 11, 1, 2);
+      ctx.strokeStyle = "rgba(227,170,255,0.8)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(16, 14, 12, Math.PI * 0.1, Math.PI * 1.9);
+      ctx.stroke();
     }
 
     this.textures.addCanvas(key, canvas);
@@ -595,6 +725,127 @@ export class BootScene extends Phaser.Scene {
     ctx.fillRect(18, 5, 2, 2);
 
     this.textures.addCanvas("npc_elder", canvas);
+
+    const traderCanvas = document.createElement("canvas");
+    traderCanvas.width = 32;
+    traderCanvas.height = 32;
+    const tCtx = traderCanvas.getContext("2d")!;
+
+    tCtx.fillStyle = "rgba(0,0,0,0.2)";
+    tCtx.beginPath();
+    tCtx.ellipse(16, 30, 8, 3, 0, 0, Math.PI * 2);
+    tCtx.fill();
+
+    tCtx.fillStyle = "#5a3b22";
+    tCtx.fillRect(10, 27, 5, 3);
+    tCtx.fillRect(17, 27, 5, 3);
+
+    const coatGrad = tCtx.createLinearGradient(0, 10, 0, 28);
+    coatGrad.addColorStop(0, "#4f6f3a");
+    coatGrad.addColorStop(1, "#314724");
+    tCtx.fillStyle = coatGrad;
+    tCtx.fillRect(8, 10, 16, 18);
+    tCtx.fillStyle = "#d6af6d";
+    tCtx.fillRect(8, 10, 16, 2);
+    tCtx.fillStyle = "rgba(0,0,0,0.12)";
+    tCtx.fillRect(8, 10, 3, 18);
+
+    tCtx.fillStyle = "#ffcc88";
+    tCtx.fillRect(6, 14, 4, 4);
+    tCtx.fillRect(22, 14, 4, 4);
+
+    tCtx.fillStyle = "#6a4a2a";
+    tCtx.fillRect(25, 10, 2, 17);
+    tCtx.fillStyle = "#b4824f";
+    tCtx.fillRect(24, 9, 4, 2);
+
+    tCtx.fillStyle = "#ffcc88";
+    tCtx.beginPath();
+    tCtx.ellipse(16, 6, 6, 6, 0, 0, Math.PI * 2);
+    tCtx.fill();
+
+    tCtx.fillStyle = "#4d2f1a";
+    tCtx.fillRect(10, 3, 12, 3);
+    tCtx.fillStyle = "#6f4a2b";
+    tCtx.fillRect(12, 1, 8, 2);
+
+    tCtx.fillStyle = "#000000";
+    tCtx.fillRect(13, 6, 2, 2);
+    tCtx.fillRect(18, 6, 2, 2);
+
+    this.textures.addCanvas("npc_trader", traderCanvas);
+
+    const wardenCanvas = document.createElement("canvas");
+    wardenCanvas.width = 32;
+    wardenCanvas.height = 32;
+    const wCtx = wardenCanvas.getContext("2d")!;
+    wCtx.fillStyle = "rgba(0,0,0,0.2)";
+    wCtx.beginPath();
+    wCtx.ellipse(16, 30, 8, 3, 0, 0, Math.PI * 2);
+    wCtx.fill();
+    wCtx.fillStyle = "#5a3b22";
+    wCtx.fillRect(10, 27, 5, 3);
+    wCtx.fillRect(17, 27, 5, 3);
+    const wCoat = wCtx.createLinearGradient(0, 10, 0, 28);
+    wCoat.addColorStop(0, "#475d74");
+    wCoat.addColorStop(1, "#2e4258");
+    wCtx.fillStyle = wCoat;
+    wCtx.fillRect(8, 10, 16, 18);
+    wCtx.fillStyle = "#d9b984";
+    wCtx.fillRect(8, 10, 16, 2);
+    wCtx.fillStyle = "#ffcc88";
+    wCtx.fillRect(6, 14, 4, 4);
+    wCtx.fillRect(22, 14, 4, 4);
+    wCtx.fillStyle = "#8aa0bc";
+    wCtx.fillRect(3, 6, 3, 16);
+    wCtx.fillStyle = "#c8d6e7";
+    wCtx.fillRect(2, 5, 5, 2);
+    wCtx.fillStyle = "#ffcc88";
+    wCtx.beginPath();
+    wCtx.ellipse(16, 6, 6, 6, 0, 0, Math.PI * 2);
+    wCtx.fill();
+    wCtx.fillStyle = "#2f2a33";
+    wCtx.fillRect(10, 2, 12, 3);
+    wCtx.fillStyle = "#000";
+    wCtx.fillRect(13, 6, 2, 2);
+    wCtx.fillRect(18, 6, 2, 2);
+    this.textures.addCanvas("npc_cave_warden", wardenCanvas);
+
+    const scoutCanvas = document.createElement("canvas");
+    scoutCanvas.width = 32;
+    scoutCanvas.height = 32;
+    const sCtx = scoutCanvas.getContext("2d")!;
+    sCtx.fillStyle = "rgba(0,0,0,0.2)";
+    sCtx.beginPath();
+    sCtx.ellipse(16, 30, 8, 3, 0, 0, Math.PI * 2);
+    sCtx.fill();
+    sCtx.fillStyle = "#5a3b22";
+    sCtx.fillRect(10, 27, 5, 3);
+    sCtx.fillRect(17, 27, 5, 3);
+    const sCoat = sCtx.createLinearGradient(0, 10, 0, 28);
+    sCoat.addColorStop(0, "#3f5242");
+    sCoat.addColorStop(1, "#2a3b2f");
+    sCtx.fillStyle = sCoat;
+    sCtx.fillRect(8, 10, 16, 18);
+    sCtx.fillStyle = "#d9b984";
+    sCtx.fillRect(8, 10, 16, 2);
+    sCtx.fillStyle = "#ffcc88";
+    sCtx.fillRect(6, 14, 4, 4);
+    sCtx.fillRect(22, 14, 4, 4);
+    sCtx.fillStyle = "#c7d1de";
+    sCtx.fillRect(24, 8, 2, 14);
+    sCtx.fillStyle = "#8ea5bf";
+    sCtx.fillRect(23, 7, 4, 2);
+    sCtx.fillStyle = "#ffcc88";
+    sCtx.beginPath();
+    sCtx.ellipse(16, 6, 6, 6, 0, 0, Math.PI * 2);
+    sCtx.fill();
+    sCtx.fillStyle = "#34313a";
+    sCtx.fillRect(10, 2, 12, 3);
+    sCtx.fillStyle = "#000";
+    sCtx.fillRect(13, 6, 2, 2);
+    sCtx.fillRect(18, 6, 2, 2);
+    this.textures.addCanvas("npc_ruins_scout", scoutCanvas);
   }
 
   // ─── Combat Background (unused but kept) ────────────────────

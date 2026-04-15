@@ -29,7 +29,8 @@ export class Player extends BaseEntity {
     if (this.body) {
       this.body.setSize(24, 24);
       this.body.setOffset(4, 8);
-      this.body.setCollideWorldBounds(false);
+      this.body.setCollideWorldBounds(true);
+      this.body.pushable = false;
     }
 
     this.nameText.setStyle({
@@ -122,6 +123,13 @@ export class Player extends BaseEntity {
     this.data.position.y = nextTileY;
     this.nameText.setPosition(this.sprite.x, this.sprite.y - 24);
 
+    this.updateAnimation();
+  }
+
+  forceStopMovement(): void {
+    if (!this.body) return;
+    this.body.setVelocity(0, 0);
+    this.isMoving = false;
     this.updateAnimation();
   }
 

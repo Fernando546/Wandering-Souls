@@ -1,0 +1,14 @@
+{
+  "id": "ruins_scout_progress",
+  "startNodeId": "progress",
+  "nodes": {
+    "progress": {
+      "id": "progress",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "The Void Revenant still guards the upper shrine. End it and return.",
+      "choices": [
+        { "text": "On my way.", "nextNodeId": null }
+      ]
+    }
+  }
+}

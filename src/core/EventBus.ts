@@ -15,6 +15,7 @@ export enum GameEvents {
   DIALOGUE_OPEN = "dialogue:open",
   DIALOGUE_CLOSE = "dialogue:close",
   DIALOGUE_ADVANCE = "dialogue:advance",
+  DIALOGUE_ACTION = "dialogue:action",
   ENTITY_DIED = "entity:died",
   ENEMY_CONTACT = "enemy:contact",
   NPC_INTERACT = "npc:interact",
@@ -25,6 +26,8 @@ export enum GameEvents {
   PLAYER_ACTION_SKILL2 = "player:actionSkill2",
   ENEMY_ACTION_ATTACK = "enemy:actionAttack",
   INVENTORY_UPDATED = "inventory:updated",
+  INVENTORY_USE_ITEM = "inventory:useItem",
+  QUEST_LOG_UPDATED = "quest:logUpdated",
 }
 
 class EventBus extends Phaser.Events.EventEmitter {

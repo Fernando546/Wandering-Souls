@@ -1,0 +1,26 @@
+{
+  "id": "cave_warden_elite_turnin",
+  "startNodeId": "turnin",
+  "nodes": {
+    "turnin": {
+      "id": "turnin",
+      "speaker": "Cave Warden Lysa",
+      "text": "You actually did it. The overseer is down.",
+      "choices": [
+        {
+          "text": "The elite is dead.",
+          "nextNodeId": "done",
+          "action": { "type": "completeQuest", "value": "cave_elite_hunt" }
+        }
+      ]
+    },
+    "done": {
+      "id": "done",
+      "speaker": "Cave Warden Lysa",
+      "text": "Excellent. A new route is open to the Sunken Sanctum. Take this weapon and move out.",
+      "choices": [
+        { "text": "I am ready.", "nextNodeId": null }
+      ]
+    }
+  }
+}

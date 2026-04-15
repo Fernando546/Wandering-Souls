@@ -1,0 +1,14 @@
+{
+  "id": "cave_warden_progress",
+  "startNodeId": "progress",
+  "nodes": {
+    "progress": {
+      "id": "progress",
+      "speaker": "Cave Warden Lysa",
+      "text": "The cave is still crawling. Finish the count: 4 bandits and 4 wolves.",
+      "choices": [
+        { "text": "Still working on it.", "nextNodeId": null }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "cave_warden_elite_offer",
+  "startNodeId": "offer",
+  "nodes": {
+    "offer": {
+      "id": "offer",
+      "speaker": "Cave Warden Lysa",
+      "text": "One threat remains: the Cave Overseer. Bring that elite down and the route ahead will be ours.",
+      "choices": [
+        {
+          "text": "I will hunt the overseer.",
+          "nextNodeId": "accepted",
+          "action": { "type": "startQuest", "value": "cave_elite_hunt" }
+        },
+        { "text": "Not yet.", "nextNodeId": null }
+      ]
+    },
+    "accepted": {
+      "id": "accepted",
+      "speaker": "Cave Warden Lysa",
+      "text": "Find it near the northern chamber and finish it.",
+      "choices": [
+        { "text": "On my way.", "nextNodeId": null }
+      ]
+    }
+  }
+}

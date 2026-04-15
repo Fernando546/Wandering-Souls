@@ -1,0 +1,14 @@
+{
+  "id": "ruins_scout_done",
+  "startNodeId": "done",
+  "nodes": {
+    "done": {
+      "id": "done",
+      "speaker": "Sanctum Scout Ivar",
+      "text": "The sanctum is finally silent. Legends will remember this run.",
+      "choices": [
+        { "text": "Time to head back.", "nextNodeId": null }
+      ]
+    }
+  }
+}

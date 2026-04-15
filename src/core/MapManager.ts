@@ -23,6 +23,7 @@ export interface SpawnPoint {
   x: number;
   y: number;
   patrolRadius: number;
+  respawnTimeMs: number;
 }
 
 export interface NpcSpawn {
@@ -50,6 +51,7 @@ export interface ExtractedMapData {
 export class MapManager {
   private currentMapId: string = "";
   private tilemap: Phaser.Tilemaps.Tilemap | null = null;
+  private tileLayers: Phaser.Tilemaps.TilemapLayer[] = [];
   private extractedData: ExtractedMapData | null = null;
   private collisionBoxes: Phaser.Geom.Rectangle[] = [];
   private decorSprites: Phaser.GameObjects.Sprite[] = [];
@@ -60,8 +62,13 @@ export class MapManager {
 
   /** Call before loading a new map to clean up old decor sprites */
   cleanup(): void {
+    this.tileLayers.forEach((layer) => layer.destroy());
+    this.tileLayers = [];
     this.decorSprites.forEach(s => s.destroy());
     this.decorSprites = [];
+    this.tilemap = null;
+    this.extractedData = null;
+    this.collisionBoxes = [];
   }
 
   buildTilemap(scene: Phaser.Scene, mapId: string, tilesetKey: string): ExtractedMapData | null {
@@ -90,6 +97,9 @@ export class MapManager {
         const layer = this.tilemap.createLayer("Ground", tileset, 0, 0);
         console.log("[MapManager] Ground layer created:", !!layer);
         layer?.setDepth(0);
+        if (layer) {
+          this.tileLayers.push(layer);
+        }
       }
       
       const decorLayer = this.tilemap.getLayer("Decor");
@@ -184,7 +194,8 @@ export class MapManager {
             enemyId: props.enemyId || "slime",
             x: Math.floor(px / 32),
             y: Math.floor(py / 32),
-            patrolRadius: props.patrolRadius || 0
+            patrolRadius: props.patrolRadius || 0,
+            respawnTimeMs: props.respawnTimeMs || 10000,
           });
         } else if (obj.type === "npc") {
           this.extractedData!.npcSpawns.push({
@@ -230,15 +241,29 @@ export class MapManager {
   getCollisionAt(tileX: number, tileY: number): boolean {
     if (!this.tilemap) return true;
     if (tileX < 0 || tileY < 0 || tileX >= this.tilemap.width || tileY >= this.tilemap.height) return true;
-    
-    // Check if pixel center overlaps any strict collision boxes
-    // tileX/tileY in pixels:
+    // Check if pixel center overlaps any strict collision boxes.
     const px = tileX * 32 + 16;
     const py = tileY * 32 + 16;
-    for (const box of this.collisionBoxes) {
-      if (box.contains(px, py)) return true;
+    return this.isPixelBlocked(px, py);
+  }
+
+  isPixelBlocked(pixelX: number, pixelY: number): boolean {
+    if (!this.tilemap) return true;
+
+    if (pixelX < 0 || pixelY < 0 || pixelX >= this.tilemap.widthInPixels || pixelY >= this.tilemap.heightInPixels) {
+      return true;
     }
+
+    for (const box of this.collisionBoxes) {
+      if (box.contains(pixelX, pixelY)) return true;
+    }
+
     return false;
+  }
+
+  getWorldSizePixels(): { width: number; height: number } | null {
+    if (!this.tilemap) return null;
+    return { width: this.tilemap.widthInPixels, height: this.tilemap.heightInPixels };
   }
 
   getTransitionAt(tileX: number, tileY: number): TransitionZone | null {

@@ -1,0 +1,14 @@
+{
+  "id": "cave_warden_elite_progress",
+  "startNodeId": "progress",
+  "nodes": {
+    "progress": {
+      "id": "progress",
+      "speaker": "Cave Warden Lysa",
+      "text": "The Cave Overseer still lives. End it and report back.",
+      "choices": [
+        { "text": "I will return with news.", "nextNodeId": null }
+      ]
+    }
+  }
+}

@@ -47,6 +47,11 @@
       </section>
 
       <aside id="right-panel">
+        <div class="panel-section panel-wallet">
+          <h2 class="panel-title">Coin Pouch</h2>
+          <div id="currency-display">Coins: <span id="currency-value">0</span></div>
+        </div>
+
         <div class="panel-section panel-gear">
           <h2 class="panel-title">Character Gear</h2>
           <div id="equipment-slots"></div>
@@ -104,7 +109,27 @@
             </div>
           </div>
           <div id="action-caption">Move: WASD | Interact: E | Attack: LMB / 1 / 2</div>
+          <div id="quest-tracker">Quest: Speak with the Village Elder.</div>
         </div>
+
+        <div id="utility-buttons" aria-label="Menus">
+          <button id="quest-menu-btn" class="utility-btn" type="button" title="Quest Log">Q</button>
+          <button class="utility-btn" type="button" title="Reserved" disabled>-</button>
+          <button class="utility-btn" type="button" title="Reserved" disabled>-</button>
+          <button class="utility-btn" type="button" title="Reserved" disabled>-</button>
+        </div>
+      </div>
+
+      <div id="quest-log-popup" class="panel-popup hidden" role="dialog" aria-label="Quest Log" aria-hidden="true">
+        <div id="quest-log-header" class="panel-popup-header">
+          <span>Quest Journal</span>
+          <button id="quest-log-close" class="panel-popup-close" type="button" aria-label="Close quest log">x</button>
+        </div>
+        <div class="panel-popup-tabs" id="quest-log-tabs">
+          <button id="quest-tab-active" class="quest-tab active" type="button">Active</button>
+          <button id="quest-tab-completed" class="quest-tab" type="button">Completed</button>
+        </div>
+        <div id="quest-log-content" class="panel-popup-content"></div>
       </div>
     </div>
 

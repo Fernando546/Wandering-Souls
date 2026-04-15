@@ -1,0 +1,14 @@
+{
+  "id": "cave_warden_done",
+  "startNodeId": "done",
+  "nodes": {
+    "done": {
+      "id": "done",
+      "speaker": "Cave Warden Lysa",
+      "text": "The cave is under control. Push into the Sunken Sanctum and finish what started this mess.",
+      "choices": [
+        { "text": "I will handle it.", "nextNodeId": null }
+      ]
+    }
+  }
+}

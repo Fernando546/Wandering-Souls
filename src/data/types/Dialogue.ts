@@ -18,7 +18,7 @@ export interface DialogueCondition {
 }
 
 export interface DialogueAction {
-  type: "startQuest" | "giveItem" | "giveXp" | "heal";
+  type: "startQuest" | "completeQuest" | "giveItem" | "giveXp" | "heal" | "sellNeutral" | "buyItem";
   value: string | number;
 }
 

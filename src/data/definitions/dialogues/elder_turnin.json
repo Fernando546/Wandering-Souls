@@ -1,0 +1,27 @@
+{
+  "id": "elder_turnin",
+  "startNodeId": "ready",
+  "nodes": {
+    "ready": {
+      "id": "ready",
+      "speaker": "Village Elder",
+      "text": "You did it. The meadow is safer now. As promised, I will open the cave route.",
+      "choices": [
+        {
+          "text": "I completed the hunt.",
+          "nextNodeId": "reward",
+          "action": { "type": "completeQuest", "value": "elder_hunt" }
+        },
+        { "text": "I will return in a moment.", "nextNodeId": null }
+      ]
+    },
+    "reward": {
+      "id": "reward",
+      "speaker": "Village Elder",
+      "text": "Take this reward and head north when ready. The cave gate is now open.",
+      "choices": [
+        { "text": "Thank you.", "nextNodeId": null }
+      ]
+    }
+  }
+}
