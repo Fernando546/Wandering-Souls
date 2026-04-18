@@ -164,7 +164,7 @@ export class WorldScene extends Phaser.Scene {
         this.playerClass,
         spawnPos
       );
-      this.player = new Player(this, playerEntityData, this.mapManager);
+      this.player = new Player(this, playerEntityData);
     } else {
       this.player.getSprite().setPosition(spawnPos.x * 32 + 16, spawnPos.y * 32 + 16);
     }
@@ -220,7 +220,7 @@ export class WorldScene extends Phaser.Scene {
         respawnTimeMs = spawn.enemyId === "cave_overseer" ? 22000 : 15000;
       }
 
-      const enemy = new Enemy(this, entityData, this.mapManager, spawn.patrolRadius, respawnTimeMs);
+      const enemy = new Enemy(this, entityData, spawn.patrolRadius, respawnTimeMs);
       this.enemies.push(enemy);
       this.enemyTemplateByRuntimeId.set(id, spawn.enemyId);
 

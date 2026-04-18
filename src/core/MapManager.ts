@@ -170,10 +170,25 @@ export class MapManager {
 
     // Parse Collisions ObjectGroup
     const collisionLayer = this.tilemap.getObjectLayer("Collisions");
+    const decorLayer = this.tilemap.getLayer("Decor");
+    const firstGid = this.tilemap.tilesets[0]?.firstgid || 1;
+
     if (collisionLayer && collisionLayer.objects) {
       collisionLayer.objects.forEach(obj => {
         if (obj.x !== undefined && obj.y !== undefined && obj.width && obj.height) {
-          this.collisionBoxes.push(new Phaser.Geom.Rectangle(obj.x, obj.y, obj.width, obj.height));
+          let box = new Phaser.Geom.Rectangle(obj.x, obj.y, obj.width, obj.height);
+          
+          if (obj.width === 32 && obj.height === 32 && decorLayer) {
+            const tileX = Math.floor(obj.x / 32);
+            const tileY = Math.floor(obj.y / 32);
+            const tile = decorLayer.data[tileY]?.[tileX];
+            
+            // Tile index 6 corresponds to tree decor/bush
+            if (tile && tile.index - firstGid === 6) {
+              box = new Phaser.Geom.Rectangle(obj.x + 8, obj.y + 16, 16, 14);
+            }
+          }
+          this.collisionBoxes.push(box);
         }
       });
     }

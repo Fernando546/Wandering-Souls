@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import type { BaseEntityData } from "@data/types/Entity";
-import type { MapManager } from "@core/MapManager";
 import { BaseEntity } from "./BaseEntity";
 import { eventBus, GameEvents } from "@core/EventBus";
 
@@ -8,7 +7,6 @@ export class Enemy extends BaseEntity {
   private originX: number;
   private originY: number;
   private speed: number = 40;
-  private mapManager: MapManager;
   private body: Phaser.Physics.Arcade.Body | null = null;
   private isDead: boolean = false;
   private respawnTimeMs: number = 10000;
@@ -28,14 +26,12 @@ export class Enemy extends BaseEntity {
   constructor(
     scene: Phaser.Scene,
     data: BaseEntityData,
-    mapManager: MapManager,
     _patrolRadius: number,
     respawnTimeMs: number = 10000
   ) {
     super(scene, data);
     this.originX = data.position.x;
     this.originY = data.position.y;
-    this.mapManager = mapManager;
     this.respawnTimeMs = respawnTimeMs;
     // We could use patrolRadius for roaming, but we'll focus on aggro for now.
 
@@ -45,7 +41,7 @@ export class Enemy extends BaseEntity {
     if (this.body) {
       this.body.setSize(24, 24);
       this.body.setOffset(4, 4);
-      this.body.setImmovable(true);
+      this.body.pushable = false;
     }
 
     this.nameText.setStyle({
@@ -107,7 +103,6 @@ export class Enemy extends BaseEntity {
       // Chase with collision-aware movement to avoid clipping through map blocks.
       const desiredVx = (dx / dist) * this.speed;
       const desiredVy = (dy / dist) * this.speed;
-      const dt = 1 / 60;
 
       let vx = desiredVx;
       let vy = desiredVy;

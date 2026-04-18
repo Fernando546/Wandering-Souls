@@ -1,13 +1,11 @@
 import Phaser from "phaser";
 import type { BaseEntityData } from "@data/types/Entity";
-import type { MapManager } from "@core/MapManager";
 import type { InputState } from "@core/InputManager";
 import { BaseEntity } from "./BaseEntity";
 import { eventBus, GameEvents } from "@core/EventBus";
 
 export class Player extends BaseEntity {
   private baseSpeed: number = 120;
-  private mapManager: MapManager;
   private body: Phaser.Physics.Arcade.Body | null = null;
   private lastDirection: string = "down";
   private isMoving: boolean = false;
@@ -20,15 +18,13 @@ export class Player extends BaseEntity {
   private attackHaltTimer: number = 0;
   private attackHaltDuration: number = 250; // slowdown duration on attack
 
-  constructor(scene: Phaser.Scene, data: BaseEntityData, mapManager: MapManager) {
+  constructor(scene: Phaser.Scene, data: BaseEntityData) {
     super(scene, data);
-    this.mapManager = mapManager;
 
     scene.physics.add.existing(this.sprite);
     this.body = this.sprite.body as Phaser.Physics.Arcade.Body;
     if (this.body) {
-      this.body.setSize(24, 24);
-      this.body.setOffset(4, 8);
+      this.body.setCircle(11, 5, 10);
       this.body.setCollideWorldBounds(true);
       this.body.pushable = false;
     }
@@ -131,13 +127,6 @@ export class Player extends BaseEntity {
 
     if (this.sprite.anims.currentAnim?.key !== animKey && this.scene.anims.exists(animKey)) {
       this.sprite.play(animKey);
-    }
-
-    // Only tint during attack, otherwise keep natural colors
-    if (this.attackHaltTimer > 0) {
-      this.sprite.setTint(0xffcccc);
-    } else {
-      this.sprite.clearTint();
     }
   }
 
