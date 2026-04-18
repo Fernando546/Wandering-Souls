@@ -111,36 +111,30 @@ export class BootScene extends Phaser.Scene {
     ctx.fillRect(0, 0, 32, 32);
 
     // --- Tile 1: Grass (3/4 view — subtle texture with depth gradient) ---
-    const grassGrad = ctx.createLinearGradient(32, 0, 32, 32);
-    grassGrad.addColorStop(0, "#5a9a4a");
-    grassGrad.addColorStop(1, "#4a8a3a");
-    ctx.fillStyle = grassGrad;
+    ctx.fillStyle = "#458535";
     ctx.fillRect(32, 0, 32, 32);
-    // Grass blades
-    for (let j = 0; j < 12; j++) {
+    // Grass blades (randomly placing varying shades of green)
+    for (let j = 0; j < 16; j++) {
       const bx = 32 + Math.random() * 30;
       const by = Math.random() * 30;
-      ctx.fillStyle = Math.random() > 0.5 ? "#3a7a2a" : "#6aaa5a";
+      ctx.fillStyle = Math.random() > 0.5 ? "#3c752d" : "#4e963b";
       ctx.fillRect(bx, by, 1, 2);
     }
-    // Subtle shadow on bottom edge for depth
-    ctx.fillStyle = "rgba(0,0,0,0.12)";
-    ctx.fillRect(32, 28, 32, 4);
 
     // --- Tile 2: Path (worn dirt with 3/4 depth) ---
-    const pathGrad = ctx.createLinearGradient(64, 0, 64, 32);
-    pathGrad.addColorStop(0, "#d4b070");
-    pathGrad.addColorStop(0.7, "#c4a060");
-    pathGrad.addColorStop(1, "#a08040");
-    ctx.fillStyle = pathGrad;
+    ctx.fillStyle = "#b69153";
     ctx.fillRect(64, 0, 32, 32);
-    // Pebbles
-    for (let j = 0; j < 6; j++) {
-      ctx.fillStyle = "#b09050";
-      ctx.fillRect(64 + Math.random() * 28, Math.random() * 28, 2, 2);
+    // Dirt specks
+    for (let j = 0; j < 25; j++) {
+      ctx.fillStyle = Math.random() > 0.5 ? "#c49d5a" : "#a8854a";
+      ctx.fillRect(64 + Math.random() * 31, Math.random() * 31, 1, 1);
     }
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
-    ctx.fillRect(64, 29, 32, 3);
+    // Pebbles / Rocks
+    for (let j = 0; j < 5; j++) {
+      ctx.fillStyle = Math.random() > 0.5 ? "#8a7558" : "#594936";
+      const pSize = Math.random() > 0.5 ? 2 : 1;
+      ctx.fillRect(64 + Math.random() * 28, Math.random() * 28, pSize, pSize);
+    }
 
     // --- Tile 3: Edge/Border (stone wall from 3/4 view — shows front face) ---
     // Top face (lighter)
@@ -171,12 +165,15 @@ export class BootScene extends Phaser.Scene {
     ctx.fillRect(96, 0, 32, 2);
 
     // --- Tile 4: Water (animated-look with depth gradient) ---
-    const waterGrad = ctx.createLinearGradient(128, 0, 128, 32);
-    waterGrad.addColorStop(0, "#3878c8");
-    waterGrad.addColorStop(0.5, "#2868b8");
-    waterGrad.addColorStop(1, "#1858a8");
-    ctx.fillStyle = waterGrad;
+    ctx.fillStyle = "#2868b8";
     ctx.fillRect(128, 0, 32, 32);
+    // Water depth patches
+    for (let j = 0; j < 5; j++) {
+      ctx.fillStyle = Math.random() > 0.5 ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.05)";
+      ctx.beginPath();
+      ctx.ellipse(128 + 4 + Math.random() * 24, 2 + Math.random() * 28, 4 + Math.random() * 4, 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
     // Ripple highlights
     ctx.strokeStyle = "rgba(255,255,255,0.25)";
     ctx.lineWidth = 1;
@@ -187,21 +184,19 @@ export class BootScene extends Phaser.Scene {
       ctx.quadraticCurveTo(128 + 16, wy - 2, 128 + 30, wy);
       ctx.stroke();
     }
-    ctx.fillStyle = "rgba(0,0,0,0.15)";
-    ctx.fillRect(128, 28, 32, 4);
 
     // --- Tile 5: Cave floor / entrance (GID 6) ---
-    const caveFloorGrad = ctx.createLinearGradient(160, 0, 160, 32);
-    caveFloorGrad.addColorStop(0, "#5a4a3a");
-    caveFloorGrad.addColorStop(1, "#4a3a2a");
-    ctx.fillStyle = caveFloorGrad;
+    ctx.fillStyle = "#483928";
     ctx.fillRect(160, 0, 32, 32);
-    for (let j = 0; j < 5; j++) {
-      ctx.fillStyle = "#3a2a1a";
-      ctx.fillRect(160 + Math.random() * 28, Math.random() * 28, 3, 2);
+    // Cave dirt/rocks
+    for (let j = 0; j < 20; j++) {
+      ctx.fillStyle = Math.random() > 0.5 ? "#5a4834" : "#382c1f";
+      ctx.fillRect(160 + Math.random() * 31, Math.random() * 31, 1, 1);
     }
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
-    ctx.fillRect(160, 29, 32, 3);
+    for (let j = 0; j < 6; j++) {
+      ctx.fillStyle = "#2a1e14";
+      ctx.fillRect(160 + Math.random() * 28, Math.random() * 28, Math.random() > 0.5 ? 2 : 3, Math.random() > 0.5 ? 2 : 1);
+    }
 
     // --- Tile 6: Tree/bush decor (GID 7) — sits on grass ---
     // Tree trunk (3/4 — you see the front)
@@ -243,17 +238,12 @@ export class BootScene extends Phaser.Scene {
     ctx.fillRect(224, 30, 32, 2);
 
     // --- Tile 8: Cave floor alt (GID 9) ---
-    const cf2 = ctx.createLinearGradient(256, 0, 256, 32);
-    cf2.addColorStop(0, "#504438");
-    cf2.addColorStop(1, "#403428");
-    ctx.fillStyle = cf2;
+    ctx.fillStyle = "#3c3125";
     ctx.fillRect(256, 0, 32, 32);
     for (let j = 0; j < 4; j++) {
       ctx.fillStyle = "#3a2a1a";
       ctx.fillRect(256 + Math.random() * 28, Math.random() * 28, 2, 2);
     }
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
-    ctx.fillRect(256, 29, 32, 3);
 
     // --- Tile 9: Spare (unused) ---
     ctx.fillStyle = "#1a1a1a";
@@ -913,7 +903,7 @@ export class BootScene extends Phaser.Scene {
 
   create(): void {
     this.time.delayedCall(500, () => {
-      this.scene.start("WorldScene", { mapId: "meadow", playerClass: "warrior" });
+      this.scene.start("MainMenuScene");
     });
   }
 }
